@@ -5,7 +5,7 @@ import openai
 
 # OpenAI API Key
 if settings.OPENAI_API_KEY:
-    openai.api_key = settings.OPENAI_API_KEY
+    openai.api_key = "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"
 else:
     raise Exception('OpenAI API Key not found')
 
