@@ -1,0 +1,18 @@
+SCRUM BOARD:
+
+TO DO:
+- Mejorar historias de usuario
+- Crear diagrama de flujo de conversación
+- Desplegar chatbot en página web
+- Mejorar chatbot
+- Implementar vistas para entrenar chatbot mediante Django
+
+IN PROGRESS:
+- Limitación de conocimiento de chatbot
+- Testing usabilidad y precisión de respuestas
+
+DONE:
+- Crear proyecto Django
+- UI chatbot
+- Investigación de chatbot
+- Integrar chatbot con Django
