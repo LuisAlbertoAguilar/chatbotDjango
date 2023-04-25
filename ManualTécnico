@@ -1,0 +1,30 @@
+Introducción
+El chatbot es una herramienta que utiliza inteligencia artificial para proporcionar una experiencia de usuario personalizada en una página web. En este manual, se explica cómo construir un chatbot utilizando ChatGPT con la librería OpenAI y desplegarlo en Google Cloud Run.
+
+Pre-requisitos
+Para construir el chatbot, se necesitan los siguientes pre-requisitos:
+
+Una cuenta de Google Cloud Platform
+Conocimientos básicos de Python y Django
+Conocimientos básicos de la API de OpenAI
+Una cuenta de OpenAI con acceso a la API de ChatGPT
+Estructura del chatbot
+El chatbot se compone de varios componentes, incluyendo:
+
+Un componente de procesamiento de lenguaje natural que utiliza la API de OpenAI para analizar y comprender las consultas del usuario.
+Un modelo de aprendizaje automático basado en ChatGPT para generar respuestas adecuadas y personalizadas.
+Un motor de respuestas que recibe las respuestas del modelo y las devuelve al usuario.
+Una interfaz de usuario que permite al usuario interactuar con el chatbot.
+Integración con una base de datos para almacenar información del usuario y personalizar las respuestas.
+Gestión de sesiones para mantener el contexto de la conversación y proporcionar respuestas más precisas.
+Integración con la API de OpenAI
+Para integrar el chatbot con la API de OpenAI, se debe crear una cuenta en OpenAI y obtener una clave de API. Luego, se debe instalar la librería de OpenAI en el entorno de desarrollo utilizando pip. Una vez instalada la librería, se puede utilizar la clave de API para autenticarse y hacer llamadas a la API de ChatGPT.
+
+Integración con Google Cloud Run
+Google Cloud Run es una plataforma que permite desplegar aplicaciones en contenedores. Para desplegar el chatbot en Google Cloud Run, se debe crear un archivo de configuración de contenedor (Dockerfile) que incluya todas las dependencias del chatbot y defina el entorno de ejecución. Luego, se debe crear un archivo de configuración de despliegue (cloudbuild.yaml) que defina los pasos necesarios para construir y desplegar el contenedor en Google Cloud Run.
+
+Configuración de la base de datos
+El chatbot puede integrarse con una base de datos para almacenar información del usuario y personalizar las respuestas. Para configurar la base de datos, se debe instalar una base de datos compatible con Django, como PostgreSQL o MySQL. Luego, se debe configurar la conexión de Django a la base de datos utilizando las configuraciones de Django.
+
+Gestión de sesiones
+Para mantener el contexto de la conversación y proporcionar respuestas más precisas, el chatbot gestiona las sesiones de los usuarios. Las sesiones se almacenan en cookies del navegador y se utilizan para recordar las respuestas anteriores del usuario y personalizar las respuestas futuras.
