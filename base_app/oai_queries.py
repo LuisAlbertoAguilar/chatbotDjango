@@ -39,25 +39,31 @@ def load_database():
 
 def get_completion(prompt):
     try:
+        # Creamos una sesión con el asistente y obtenemos el ID de la sesión
         response = assistant.create_session(
-        assistant_id=assistant_id
+            assistant_id=assistant_id
         ).get_result()
         session_id = response.get("session_id")
+        # Enviamos un mensaje al asistente con el texto proporcionado como prompt
         response2 = assistant.message(
-        assistant_id=assistant_id,
-        session_id=session_id,
-        input={
-            'message_type': 'text',
-            'text': prompt,
-            # 'context': {
-            #         'database_response': db
-            #     }
-        }
+            assistant_id=assistant_id,
+            session_id=session_id,
+            input={
+                'message_type': 'text',
+                'text': prompt.strip(),
+                # 'context': {
+                #         'database_response': db
+                #     }
+            }
         ).get_result()
-        # TODO: handle iframe
-        # {'title': 'Producto X:', 'source': 'https://www.javatpoint.com/', 'response_type': 'iframe'}]}, 'user_id': '14768ef6-5ae9-4419-8f1d-1b539ca95125'
+        # TODO: manejar el caso de un iframe
+        # {'title': 'Producto X:', 'source': 'https://www.javatpoint.com/', 'response_type': 'iframe'}]},
+        # 'user_id': '14768ef6-5ae9-4419-8f1d-1b539ca95125'
+
+        # Devolvemos el texto de respuesta proporcionado por el asistente
         return response2['output']['generic'][0]['text']
     except:
+        # En caso de que ocurra una excepción, mostramos un mensaje de error genérico
         return "¡Hola! Parece que ha ocurrido un error al enviar tu mensaje. Lamentamos los inconvenientes que esto pueda haber causado."
 
 
