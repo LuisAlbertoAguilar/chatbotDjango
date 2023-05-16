@@ -1,0 +1,9 @@
+Product:
+- name
+- description
+- price
+
+Order:
+- product
+- quantity
+- date

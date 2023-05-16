@@ -1,19 +1,80 @@
 # import settings
 from django.conf import settings
 import os
-import openai
+from ibm_watson import AssistantV2
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from django.apps import apps
+from django.db import models
+import uuid
+import json
+from django.core import serializers
 
-# OpenAI API Key
-if settings.OPENAI_API_KEY:
-    openai.api_key = "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"
-else:
-    raise Exception('OpenAI API Key not found')
+from base_app.models import *
+authenticator = IAMAuthenticator('olwfdKnFyjWMJIX7TLCpNcjphhnjllxCNbS4yHOnhlI9')
+assistant = AssistantV2(
+    version='2021-06-14',
+    authenticator=authenticator
+)
+assistant.set_service_url('https://api.us-south.assistant.watson.cloud.ibm.com/instances/e55e3642-1680-43f3-8fea-a23c0f36f8c5')
 
+assistant_id = 'cf116e14-d209-468e-a633-6ee7431d66fd'
+
+def export_database_to_json():
+    tables = ['Product', 'Order', 'OrderItem', 'User']  # Replace with your table names
+
+    data = {}
+    for table in tables:
+        model = apps.get_model(app_label='base_app', model_name=table)
+        queryset = model.objects.all()
+        serialized_data = serializers.serialize('json', queryset)
+        data[table] = serialized_data
+
+    with open('database.json', 'w') as file:
+        json.dump(data, file, indent=4)
+
+def load_database():
+    with open('database.json', 'r') as file:
+        database = json.load(file)
+    return database
 
 def get_completion(prompt):
-    query = openai.ChatCompletion.create(
-        model='gpt-3.5-turbo',
-        messages=[{"role": "user", "content": prompt }]
-    )
-    response = query.get('choices')[0]['message']['content']
-    return response
+    try:
+        response = assistant.create_session(
+        assistant_id=assistant_id
+        ).get_result()
+        session_id = response.get("session_id")
+        response2 = assistant.message(
+        assistant_id=assistant_id,
+        session_id=session_id,
+        input={
+            'message_type': 'text',
+            'text': prompt,
+            # 'context': {
+            #         'database_response': db
+            #     }
+        }
+        ).get_result()
+        # TODO: handle iframe
+        # {'title': 'Producto X:', 'source': 'https://www.javatpoint.com/', 'response_type': 'iframe'}]}, 'user_id': '14768ef6-5ae9-4419-8f1d-1b539ca95125'
+        return response2['output']['generic'][0]['text']
+    except:
+        return "¡Hola! Parece que ha ocurrido un error al enviar tu mensaje. Lamentamos los inconvenientes que esto pueda haber causado."
+
+
+def is_related_to_models(text):
+    # Get a list of all the model names in the Django app
+    model_names = [m.__name__ for m in apps.get_models()]
+
+    # Create a set of all the fields in the Django models
+    fields = set()
+    for model in apps.get_models():
+        for field in model._meta.get_fields():
+            if isinstance(field, models.Field):
+                fields.add(field.name)
+
+    # Check if the text mentions any of the model names or fields
+    for word in text.split():
+        if word.lower() in model_names or word.lower() in fields:
+            return True
+
+    return False
